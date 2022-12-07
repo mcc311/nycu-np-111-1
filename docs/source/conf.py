@@ -22,7 +22,7 @@ copyright = '2022, mcc311'
 author = 'mcc311'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
+release = 'v0.2'
 
 # -- Const string settings ---------------------------------------------------
 
