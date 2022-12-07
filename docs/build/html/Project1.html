@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-TW" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project 1: NPShell &mdash; Network Programming 0.1 說明文件</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/sphinx-toolbox.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sphinx_toolbox_installation.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/sphinx_toolbox_installation.js"></script>
+        <script src="_static/translations.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜尋" href="search.html" />
+    <link rel="prev" title="Welcome to Network Programming’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Network Programming
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Projects:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Project 1: NPShell</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scenario-of-using-npshell">Scenario of using npshell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#structure-of-working-directory">Structure of Working Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scenario">Scenario</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#specification">Specification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#npshell-behavior">NPShell Behavior</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Network Programming</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Project 1: NPShell</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Project1.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="project-1-npshell">
+<h1>Project 1: NPShell<a class="headerlink" href="#project-1-npshell" title="本標頭的永久連結"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="本標頭的永久連結"></a></h2>
+<p>In this project, you are asked to design a shell named <strong>npshell</strong>. The npshell should support the
+following features:</p>
+<ol class="arabic simple">
+<li><p>Execution of commands</p></li>
+<li><p>Ordinary Pipe</p></li>
+<li><p>Numbered Pipe</p></li>
+<li><p>File Redirection</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">備註</p>
+<p>More details will be defined in <a class="reference internal" href="#specification"><span class="std std-ref">Section 3</span></a>.</p>
+</div>
+</section>
+<section id="scenario-of-using-npshell">
+<h2>Scenario of using npshell<a class="headerlink" href="#scenario-of-using-npshell" title="本標頭的永久連結"></a></h2>
+<section id="structure-of-working-directory">
+<h3>Structure of Working Directory<a class="headerlink" href="#structure-of-working-directory" title="本標頭的永久連結"></a></h3>
+<p>Example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>working_dir
+|-- bin # Executables may be added to or removed from bin/
+| |-- cat
+| |-- ls
+| |-- noop # A program that does nothing
+| |-- number # Add a number to each line of input
+| |-- removetag # Remove HTML tags and output to STDOUT
+| |-- removetag0 # Same as removetag, but outputs error messages to STDERR
+|-- test.html
+|-- npshell
+</pre></div>
+</div>
+</section>
+<section id="scenario">
+<h3>Scenario<a class="headerlink" href="#scenario" title="本標頭的永久連結"></a></h3>
+<details class="summary-the-following-is-a-scenario-of-using-the-npshell">
+<summary>The following is a scenario of using the npshell.</summary><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./npshell # execute your npshell
+% printenv PATH # initial PATH is bin/ and ./
+bin:.
+% setenv PATH bin # set PATH to bin/ only
+% printenv PATH
+bin
+% ls
+bin npshell test.html
+% ls bin
+cat ls noop number removetag removetag0
+% cat test.html &gt; test1.txt
+% cat test1.txt
+&lt;!test.html&gt;
+&lt;TITLE&gt;Test&lt;/TITLE&gt;
+&lt;BODY&gt;This is a &lt;b&gt;test&lt;/b&gt; program
+for ras.
+&lt;/BODY&gt;
+% removetag test.html
+Test
+This is a test program
+for ras.
+% removetag test.html &gt; test2.txt
+% cat test2.txt
+Test
+This is a test program
+for ras.
+% removetag0 test.html
+Error: illegal tag &quot;!test.html&quot;
+Test
+This is a test program
+for ras.
+% removetag0 test.html &gt; test2.txt
+Error: illegal tag &quot;!test.html&quot;
+% cat test2.txt
+Test
+This is a test program
+for ras.
+% removetag test.html | number
+1
+2 Test
+3 This is a test program
+4 for ras.
+5
+% removetag test.html |1 # pipe STDOUT to the first command of next line
+% number # STDIN is from the previous pipe (removetag)
+1
+2 Test
+3 This is a test program
+4 for ras.
+5
+% removetag test.html |2 # pipe STDOUT to the first command of next next line
+% ls
+bin npshell test1.txt test2.txt test.html
+% number # STDIN is from the previous pipe (removetag)
+1
+2 Test
+3 This is a test program
+4 for ras.
+5
+% removetag test.html |2 # pipe STDOUT to the first command of next next line
+% removetag test.html |1 # pipe STDOUT to the first command of next line
+# (merge with the previous one)
+% number # STDIN is from the previous pipe (both two removetag)
+1
+2 Test
+3 This is a test program
+4 for ras.
+5
+6
+7 Test
+8 This is a test program
+9 for ras.
+10
+% removetag test.html |2
+% removetag test.html |1
+% number |1
+% number
+1 1
+2 2 Test
+3 3 This is a test program
+4 4 for ras.
+5 5
+6 6
+7 7 Test
+8 8 This is a test program
+9 9 for ras.
+10 10
+% removetag test.html | number |1
+% number
+1 1
+2 2 Test
+3 3 This is a test program
+4 4 for ras.
+5 5
+% removetag test.html |2 removetag test.html |1 # number pipe may occur in middle
+% number |1 number
+1 1
+2 2 Test
+3 3 This is a test program
+4 4 for ras.
+5 5
+6 6
+7 7 Test
+8 8 This is a test program
+9 9 for ras.
+10 10
+% ls |2
+% ls
+bin npshell test1.txt test2.txt test.html
+% number &gt; test3.txt
+% cat test3.txt
+1 bin
+2 npshell
+3 test1.txt
+4 test2.txt
+5 test.html
+% removetag0 test.html |1
+Error: illegal tag &quot;!test.html&quot; # output error message to STDERR
+% number
+1
+2 Test
+3 This is a test program
+4 for ras.
+5
+% removetag0 test.html !1 # pipe both STDOUT and STDERR
+# to the first command of the next line
+% number
+1 Error: illegal tag &quot;!test.html&quot;
+2
+3 Test
+4 This is a test program
+5 for ras.
+6
+% date
+Unknown command: [date].
+# TA manually moves the executable &quot;date&quot; into $working_dir/bin/
+% date
+Mon Oct 4 15:12:35 CST 2022
+% exit
+</pre></div>
+</div>
+</details></section>
+</section>
+<section id="specification">
+<h2>Specification<a class="headerlink" href="#specification" title="本標頭的永久連結"></a></h2>
+<section id="npshell-behavior">
+<h3>NPShell Behavior<a class="headerlink" href="#npshell-behavior" title="本標頭的永久連結"></a></h3>
+<ol class="arabic simple">
+<li><p>Use <strong>”% ”</strong> as the command line prompt. Notice that there is one space character after <strong>%</strong>.</p></li>
+<li><p>The npshell parses the inputs and executes commands.</p></li>
+<li><p>The npshell terminates after receiving the <strong>exit</strong> command or <strong>EOF</strong>.</p></li>
+<li><p>There will <strong>NOT</strong> exist the test case that commands need to read from <strong>STDIN</strong>.</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Network Programming’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版權所有 2022, mcc311。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
