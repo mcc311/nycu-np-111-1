@@ -421,7 +421,7 @@ File Redirection
       % cat f1.txt | number > f2.txt # This may happen
 
 Requirements and Limitations
-============================
+----------------------------
 
 1. You can only use `C/C++` to do this project. Other third-party libraries are **NOT** allowed.
 2. In this project, ``system()`` function is **NOT** allowed.
@@ -468,7 +468,7 @@ can copy them to your working directory.
 
 
 Submission
-==========
+----------
 
 - E3:
 
@@ -503,7 +503,7 @@ Submission
   b. You can push anything to Bitbucket, but make sure to commit **at least 5 times**.
 
 Notes
-=====
+-----
 
 1. We take plagiarism SERIOUSLY. 
   .. danger::
