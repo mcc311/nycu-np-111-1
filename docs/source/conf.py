@@ -27,7 +27,12 @@ release = 'v0.2'
 # -- Const string settings ---------------------------------------------------
 
 # default_student_id = 309554042
-rst_epilog = '.. |workspace| replace:: %s' % "nycu-np-2022"
+rst_epilog = """
+.. |workspace| replace:: nycu-np-2022
+.. |Project_Name| replace:: NYCU Network Programming 2022
+"""
+
+
 
 # -- General configuration ---------------------------------------------------
 

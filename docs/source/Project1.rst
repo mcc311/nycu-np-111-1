@@ -330,7 +330,7 @@ Ordinary Pipe and Numbered Pipe
 2. You need implement a special piping mechanism, called **numbered pipe.** There are two types of numbered pipe **(cmd |N and cmd !N)**.
 3. **|N** means the **STDOUT** of the left hand side command will be piped to **the first command of the next N-th line**, where 1 ≤ N ≤ 1000.
 4. **!N** means both **STDOUT** and **STDERR** of the left hand side command will be piped to **the first command of the next N-th line**, where 1 ≤ N ≤ 1000.
-5. If |N and !N occurs in the middle, then the number starts counting from the same line.
+5. If \|N and !N occurs in the middle, then the number starts counting from the same line.
 6. The line with build-in command or unknown command also counts as one line for numbered pipe, but the empty line does not.
 
   .. collapse:: Example:
@@ -440,8 +440,7 @@ Requirements and Limitations
       bin:.
 
 7. You should **NOT** manage environment variables by yourself. Functions like ``getenv()`` and ``setenv()`` are **allowed**.
-8. The commands ``noop``, ``number``, ``removetag``, and ``removetag0`` are offered by TA. Please
-download them from E3 and compile.
+8. The commands ``noop``, ``number``, ``removetag``, and ``removetag0`` are offered by TA. Please download them from E3 and compile.
 
   .. collapse:: Example:
     :open:
@@ -506,6 +505,7 @@ Notes
 -----
 
 1. We take plagiarism SERIOUSLY. 
+
   .. danger::
 
     **You will get zero points on this project for plagiarism.**
