@@ -229,11 +229,9 @@ Built-in Commands
   
   - **setenv [var] [value]**
 
-    Change or add an environment variable.
-
-    If **var** does not exist in the environment, add var to the environment with the value **value**.
-    
-    If **var** already exists in the environment, change the value of **var** to **value**.
+    | Change or add an environment variable.
+    | If **var** does not exist in the environment, add var to the environment with the value **value**.
+    | If **var** already exists in the environment, change the value of **var** to **value**.
 
     .. collapse:: Example:
       :open:
@@ -265,15 +263,12 @@ Built-in Commands
     Terminate npshell.
 
 2. Built-in commands will appear solely in a line.
-3. Built-in commands will not pipe to other commands, 
-and no commands will pipe to built-in
-commands.
+3. Built-in commands will not pipe to other commands, and no commands will pipe to built-in commands.
 
 Unknown Command
 ###############
 
-1. If there is an unknown command, 
-print error message to **STDERR** with the following format:
+1. If there is an unknown command, print error message to **STDERR** with the following format:
 
   **Unknown command: [command]**.
 
@@ -319,9 +314,7 @@ print error message to **STDERR** with the following format:
 Ordinary Pipe and Numbered Pipe
 ###############################
 
-1. You need to implement **pipe (cmd1 | cmd2)**, 
-which means the STDOUT of the left hand side
-command will be piped to the right hand side command.
+1. You need to implement **pipe (cmd1 | cmd2)**, which means the STDOUT of the left hand side command will be piped to the right hand side command.
 
   .. collapse:: Example:
     :open:
@@ -333,9 +326,191 @@ command will be piped to the right hand side command.
       npshell
       test.html
 
-2. You need implement a special piping mechanism, 
-called **numbered pipe.** There are two types
-of numbered pipe **(cmd |N and cmd !N)**.
 
-3. **|N** means the **STDOUT** of the left hand side command will be piped to **the first command
-of the next N-th line**, where 1 ≤ N ≤ 1000.
+2. You need implement a special piping mechanism, called **numbered pipe.** There are two types of numbered pipe **(cmd |N and cmd !N)**.
+3. **|N** means the **STDOUT** of the left hand side command will be piped to **the first command of the next N-th line**, where 1 ≤ N ≤ 1000.
+4. **!N** means both **STDOUT** and **STDERR** of the left hand side command will be piped to **the first command of the next N-th line**, where 1 ≤ N ≤ 1000.
+5. If |N and !N occurs in the middle, then the number starts counting from the same line.
+6. The line with build-in command or unknown command also counts as one line for numbered pipe, but the empty line does not.
+
+  .. collapse:: Example:
+    :open:
+
+    .. code-block:: bash
+
+      % ls |2
+      % ctt
+      Unknown command: [ctt].
+      % cat # The output of command "ls" acts as the input of command "cat"
+      bin
+      npshell
+      test.html
+      % ls |2
+      % setenv PATH bin
+      % # Press Enter
+      % cat # The output of command "ls" acts as the input of command "cat"
+      bin
+      npshell
+      test.html
+
+7. When the output of one command is piped (no matter ordinary pipe or numbered pipe), it is likely that the output of this command exceeds the capacity of the pipe. In this case, you still need to guarantee that **all the output of this command is piped correctly.**
+
+  .. collapse:: Example:
+    :open:
+
+    .. code-block:: bash
+
+      % cat large_file.txt | number # All output of "cat" should be piped correctly
+      <many outputs...>
+      % cat large_file.txt |1 # All output of "cat" should be piped correctly
+      % number
+      <many outputs...>
+  
+  .. hint::
+    You can think about when the npshell should wait for the child process.
+
+8. The number of piped commands may exceed the maximum number of processes that one user can run. In this case, you still need to guarantee that **all commands are executed properly**.
+
+  .. collapse:: Example:
+    :open:
+
+    .. code-block:: bash
+
+      # Suppose the process limit is 512 and there are 1000 "cat" in one line.
+      # All commands in this line should be executed properly.
+      % ls | cat | cat ...... | cat
+      bin
+      npshell
+      test.html
+
+9. There will **NOT** exist the test case that one pipe is full and needs to be read by the following process (not forked yet), but the process limit is reached.
+
+
+File Redirection
+################
+
+1. You need to implement standard output **redirection (cmd > file)**, which means the output of the command will be written to files.
+
+  .. collapse:: Example:
+    :open:
+
+    .. code-block:: bash
+
+      # The output of command "ls" is redirected to file "hello.txt"
+      % ls > hello.txt
+      % cat hello.txt
+      bin
+      npshell
+      test.html
+
+2. If the file already exists, the file should be overwritten (not append).
+3. You do not need to handle appending for standard output redirection (>>).
+4. You do not need to implement standard input redirection (<).
+5. You do not need to implement standard error redirection (2>).
+6. You do not need to handle outputting to multiple files for the same command.
+7. You do not need to handle outputting to both the file and the pipe for the same command.
+
+  .. collapse:: Example:
+    :open:
+
+    .. code-block:: bash
+
+      % ls > f1.txt > f2.txt # This will not happen
+      % ls > hello.txt | cat # This will not happen
+      % ls > hello.txt |2 # This will not happen
+      % cat f1.txt | number > f2.txt # This may happen
+
+Requirements and Limitations
+============================
+
+1. You can only use `C/C++` to do this project. Other third-party libraries are **NOT** allowed.
+2. In this project, ``system()`` function is **NOT** allowed.
+3. Except for the three built-in commands (setenv, printenv, and exit), you **MUST** use **the exec family of functions** (e.g. ``execvp()``, ``execlp()``, etc) to execute commands.
+4. You **MUST** create **unnamed pipes** to implement ordinary pipe and numbered pipe. Storing data into temporary files is **NOT allowed** for ordinary pipe and numbered pipe.
+5. You should handle the forked processes properly, or there might be zombie processes.
+6. You should set the environment variable ``PATH`` to ``bin:.`` initially.
+
+  .. collapse:: Example:
+    :open:
+
+    .. code-block:: bash
+
+      $ ./npshell # execute your npshell
+      % printenv PATH # initial PATH is bin/ and ./
+      bin:.
+
+7. You should **NOT** manage environment variables by yourself. Functions like ``getenv()`` and ``setenv()`` are **allowed**.
+8. The commands ``noop``, ``number``, ``removetag``, and ``removetag0`` are offered by TA. Please
+download them from E3 and compile.
+
+  .. collapse:: Example:
+    :open:
+
+    .. code-block:: bash
+
+      g++ noop.cpp -o $working_dir/bin/noop
+
+9. The executables ``ls`` and ``cat`` are usually placed in the folder ``/bin/`` in UNIX-like systems. You
+can copy them to your working directory.
+
+  .. collapse:: Example:
+    :open:
+
+    .. code-block:: bash
+
+      cp /bin/ls /bin/cat $working_dir/bin/
+
+10. During demo, TA will prepare these ``commands`` (executables) for you, so you do **NOT** need to upload them. Besides, TA will copy additional commands to ``bin/``, which is under your working directory. Your npshell program should be able to execute them.
+11. We will use NP servers for demo. 
+
+.. note:: 
+  Make sure your npshell can be executed in NP servers.
+
+
+Submission
+==========
+
+- E3:
+
+  a. | Create a directory named your **student ID**, put your source code files and Makefile into the directory.
+     | `DO NOT` put anything else in it (e.g., ``noop``, ``removetag``, ``test.html``, ``.git``, ``MACOSX``).
+  b. You must provide a ``Makefile``, which compiles your source code into one executable named ``npshell`` with a single `make` command. The Makefile and the executable should be placed at **the top layer of the directory**. We will use this executable for demo.
+  c. zip the directory and upload the .zip file to E3.
+  
+    .. attention:: 
+       We only accept archived file(,zip).
+
+    .. collapse:: Example:
+      :open:
+
+      .. code-block:: bash
+
+        309554042
+        |-- Makefile
+        |-- npshell.cpp
+        |...
+    
+    Zip the folder 309554042 into 309554042.zip and upload 309554042.zip to E3.
+
+- Bitbucket:
+
+  a. Create a private repository with name: ``<Your Student ID>_np_project1`` inside the project np_project1 of workspace |workspace|.
+
+    .. hint:: 
+
+      e.g. bitbucket.org/|workspace|/309554042_np_project1.git
+  
+  b. You can push anything to Bitbucket, but make sure to commit **at least 5 times**.
+
+Notes
+=====
+
+1. We take plagiarism SERIOUSLY. 
+  .. danger::
+
+    **You will get zero points on this project for plagiarism.**
+
+2. You will lose points for violating any of the rules mentioned in this spec.
+3. NP projects should be run on NP servers. Otherwise, your account may be locked.
+4. Any abuse of NP server will be recorded.
+5. Do not leave any zombie processes in the system.
