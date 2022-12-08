@@ -11,5 +11,6 @@ Welcome to |Project_Name|'s documentation!
    :caption: Projects:
 
    Project1.rst
+   Project2.rst
 
 

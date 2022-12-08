@@ -227,7 +227,7 @@ Built-in Commands
 
 1. Format
   
-  - **setenv [var] [value]**
+  - **setenv <var> <value>**
 
     | Change or add an environment variable.
     | If **var** does not exist in the environment, add var to the environment with the value **value**.
@@ -241,7 +241,7 @@ Built-in Commands
         % setenv PATH bin # set PATH to bin
         % setenv PATH bin:npbin # set PATH to bin:npbin
 
-  - **printenv [var]**
+  - **printenv <var>**
 
     Print the value of an environment variable.
     If **var** does not exist in the environment, show nothing.
